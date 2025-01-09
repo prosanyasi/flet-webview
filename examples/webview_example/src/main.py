@@ -1,6 +1,6 @@
 import flet as ft
 
-import flet_web_view as fwv
+import flet_webview as fwv
 
 
 def main(page: ft.Page):

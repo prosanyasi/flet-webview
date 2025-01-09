@@ -1,4 +1,4 @@
-from flet_web_view.webview import (
+from flet_webview.webview import (
     WebView,
     WebviewConsoleMessageEvent,
     WebviewJavaScriptEvent,

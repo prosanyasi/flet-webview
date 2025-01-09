@@ -4,7 +4,7 @@
 
 ## Usage
 
-Add `flet-web-view` as dependency (`pyproject.toml` or `requirements.txt`) to your Flet project.
+Add `flet-webview` as dependency (`pyproject.toml` or `requirements.txt`) to your Flet project.
 
 ## Example
 
@@ -12,7 +12,7 @@ Add `flet-web-view` as dependency (`pyproject.toml` or `requirements.txt`) to yo
 
 import flet as ft
 
-import flet_web_view as fwv
+import flet_webview as fwv
 
 def main(page: ft.Page):
     wv = fwv.WebView(

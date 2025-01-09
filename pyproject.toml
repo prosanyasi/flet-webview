@@ -1,5 +1,5 @@
 [project]
-name = "flet-web-view"
+name = "flet-webview"
 version = "0.1.0"
 description = "WebView control for Flet"
 readme = "README.md"
@@ -17,11 +17,11 @@ dependencies = [
 [project.urls]
 Homepage = "https://flet.dev"
 Documentation = "https://flet.dev/docs/controls/webview/"
-Repository = "https://github.com/flet-dev/flet-web-view"
-Issues = "https://github.com/flet-dev/flet-web-view/issues"
+Repository = "https://github.com/flet-dev/flet-webview"
+Issues = "https://github.com/flet-dev/flet-webview/issues"
 
 [tool.setuptools.package-data]
-"flutter.flet_web_view" = ["**/*"]
+"flutter.flet_webview" = ["**/*"]
 
 [tool.uv]
 dev-dependencies = [
