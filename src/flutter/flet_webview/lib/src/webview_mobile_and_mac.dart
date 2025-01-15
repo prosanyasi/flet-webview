@@ -59,7 +59,7 @@ class _WebviewMobileAndMacState extends State<WebviewMobileAndMac> {
               "web_resource_error", "WebView error: ${error.description}");
         },
         onNavigationRequest: (NavigationRequest request) {
-          if (preventLink != null && request.url.startsWith(preventLink!)) {
+          if (preventLink != null && request.url.startsWith(preventLink)) {
             return NavigationDecision.prevent;
           }
           return NavigationDecision.navigate;
@@ -108,9 +108,9 @@ class _WebviewMobileAndMacState extends State<WebviewMobileAndMac> {
           await controller.reload();
           break;
         case "can_go_back":
-          return await controller.canGoBack().toString();
+          return controller.canGoBack().toString();
         case "can_go_forward":
-          return await controller.canGoForward().toString();
+          return controller.canGoForward().toString();
         case "go_back":
           if (await controller.canGoBack()) {
             await controller.goBack();

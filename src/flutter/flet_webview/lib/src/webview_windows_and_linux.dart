@@ -13,6 +13,6 @@ class WebviewDesktop extends StatefulWidget {
 class _WebviewDesktopState extends State<WebviewDesktop> {
   @override
   Widget build(BuildContext context) {
-    return ErrorControl("Webview is not yet supported on this Platform.");
+    return const ErrorControl("Webview is not yet supported on this Platform.");
   }
 }
