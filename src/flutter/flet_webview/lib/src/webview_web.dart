@@ -5,9 +5,8 @@ import 'package:webview_flutter_web/webview_flutter_web.dart';
 
 class WebviewWeb extends StatefulWidget {
   final Control control;
-  final FletControlBackend backend;
 
-  const WebviewWeb({super.key, required this.control, required this.backend});
+  const WebviewWeb({super.key, required this.control});
 
   @override
   State<WebviewWeb> createState() => _WebviewWebState();
@@ -25,7 +24,7 @@ class _WebviewWebState extends State<WebviewWeb> {
     )..loadRequest(
         LoadRequestParams(
             uri: Uri.parse(
-                widget.control.attrString("url", "https://flet.dev")!)),
+                widget.control.getString("url", "https://flet.dev")!)),
       );
   }
 

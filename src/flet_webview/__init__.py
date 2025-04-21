@@ -1,8 +1,8 @@
-from flet_webview.webview import (
-    WebView,
+from .types import (
     WebviewConsoleMessageEvent,
     WebviewJavaScriptEvent,
     WebviewLogLevelSeverity,
     WebviewRequestMethod,
     WebviewScrollEvent,
 )
+from .webview import WebView

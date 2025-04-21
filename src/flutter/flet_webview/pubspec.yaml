@@ -19,7 +19,8 @@ dependencies:
   webview_flutter_web: ^0.2.3+2
   webview_flutter_platform_interface: ^2.4.0
 
-  flet: ^0.25.2
+  flet:
+    path: /Users/ndonkohenri/PycharmProjects/flet-dev/flet/packages/flet
 
 dev_dependencies:
   flutter_test:
