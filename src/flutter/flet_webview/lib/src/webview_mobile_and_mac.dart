@@ -22,12 +22,6 @@ class _WebviewMobileAndMacState extends State<WebviewMobileAndMac> {
 
     var params = const PlatformWebViewControllerCreationParams();
     controller = WebViewController.fromPlatformCreationParams(params);
-    var bgcolor = widget.control.getColor("bgcolor", context);
-
-    var preventLink = widget.control.getString("prevent_link")?.trim();
-    if (bgcolor != null) {
-      controller.setBackgroundColor(bgcolor);
-    }
 
     controller.setNavigationDelegate(
       NavigationDelegate(
@@ -65,9 +59,12 @@ class _WebviewMobileAndMacState extends State<WebviewMobileAndMac> {
             widget.control.getString("method"), LoadRequestMethod.get)!);
 
     // scroll
-    controller.setOnScrollPositionChange((ScrollPositionChange position) {
-      widget.control.triggerEvent("scroll", {"x": position.x, "y": position.y});
-    });
+    if (!isMacOSDesktop()) {
+      controller.setOnScrollPositionChange((ScrollPositionChange position) {
+        widget.control
+            .triggerEvent("scroll", {"x": position.x, "y": position.y});
+      });
+    }
 
     // console
     controller.setOnConsoleMessage((JavaScriptConsoleMessage message) {
@@ -179,6 +176,11 @@ class _WebviewMobileAndMacState extends State<WebviewMobileAndMac> {
   Widget build(BuildContext context) {
     debugPrint("WebViewControl build: ${widget.control.id}");
 
+    var bgcolor = widget.control.getColor("bgcolor", context);
+
+    if (bgcolor != null) {
+      controller.setBackgroundColor(bgcolor);
+    }
     return WebViewWidget(controller: controller);
   }
 }

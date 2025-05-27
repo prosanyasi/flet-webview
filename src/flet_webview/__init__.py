@@ -1,8 +1,8 @@
 from .types import (
+    LogLevelSeverity,
+    RequestMethod,
     WebviewConsoleMessageEvent,
     WebviewJavaScriptEvent,
-    WebviewLogLevelSeverity,
-    WebviewRequestMethod,
     WebviewScrollEvent,
 )
 from .webview import WebView
