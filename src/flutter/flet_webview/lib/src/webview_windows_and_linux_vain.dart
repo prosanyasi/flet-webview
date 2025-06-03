@@ -2,9 +2,7 @@ import 'package:flet/flet.dart';
 import 'package:flutter/material.dart';
 
 class WebviewDesktop extends StatefulWidget {
-  final String url;
-
-  const WebviewDesktop({Key? key, required this.url}) : super(key: key);
+  const WebviewDesktop({Key? key}) : super(key: key);
 
   @override
   State<WebviewDesktop> createState() => _WebviewDesktopState();
