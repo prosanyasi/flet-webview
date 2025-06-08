@@ -5,9 +5,9 @@ import flet as ft
 
 from .types import (
     RequestMethod,
-    WebviewConsoleMessageEvent,
-    WebviewJavaScriptEvent,
-    WebviewScrollEvent,
+    WebViewConsoleMessageEvent,
+    WebViewJavaScriptEvent,
+    WebViewScrollEvent,
 )
 
 __all__ = ["WebView"]
@@ -88,7 +88,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_scroll: ft.OptionalEventCallable[WebviewScrollEvent] = None
+    on_scroll: ft.OptionalEventCallable[WebViewScrollEvent] = None
     """
     Fires when the web page's scroll position changes.
     
@@ -98,7 +98,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_console_message: ft.OptionalEventCallable[WebviewConsoleMessageEvent] = None
+    on_console_message: ft.OptionalEventCallable[WebViewConsoleMessageEvent] = None
     """
     Fires when a log message is written to the JavaScript console.
     
@@ -108,7 +108,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_javascript_alert_dialog: ft.OptionalEventCallable[WebviewJavaScriptEvent] = None
+    on_javascript_alert_dialog: ft.OptionalEventCallable[WebViewJavaScriptEvent] = None
     """
     Fires when the web page attempts to display a JavaScript alert() dialog.
     

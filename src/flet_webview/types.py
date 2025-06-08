@@ -6,9 +6,9 @@ import flet as ft
 __all__ = [
     "RequestMethod",
     "LogLevelSeverity",
-    "WebviewScrollEvent",
-    "WebviewConsoleMessageEvent",
-    "WebviewJavaScriptEvent",
+    "WebViewScrollEvent",
+    "WebViewConsoleMessageEvent",
+    "WebViewJavaScriptEvent",
 ]
 
 
@@ -45,7 +45,7 @@ class LogLevelSeverity(Enum):
 
 
 @dataclass
-class WebviewScrollEvent(ft.ControlEvent):
+class WebViewScrollEvent(ft.ControlEvent):
     x: float
     """The value of the horizontal offset with the origin being at the leftmost of the `WebView`."""
 
@@ -54,7 +54,7 @@ class WebviewScrollEvent(ft.ControlEvent):
 
 
 @dataclass
-class WebviewConsoleMessageEvent(ft.ControlEvent):
+class WebViewConsoleMessageEvent(ft.ControlEvent):
     message: str
     """The message written to the console."""
 
@@ -63,7 +63,7 @@ class WebviewConsoleMessageEvent(ft.ControlEvent):
 
 
 @dataclass
-class WebviewJavaScriptEvent(ft.ControlEvent):
+class WebViewJavaScriptEvent(ft.ControlEvent):
     message: str
     """The message to be displayed in the window."""
 

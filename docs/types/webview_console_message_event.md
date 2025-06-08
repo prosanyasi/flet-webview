@@ -1,1 +1,1 @@
-::: flet_webview.types.WebviewConsoleMessageEvent
+::: flet_webview.types.WebViewConsoleMessageEvent
