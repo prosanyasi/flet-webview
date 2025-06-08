@@ -1,8 +1,8 @@
-# flet-lottie
+# flet-webview
 
-[![pypi](https://img.shields.io/pypi/v/flet-lottie.svg)](https://pypi.python.org/pypi/flet-lottie)
-[![downloads](https://static.pepy.tech/badge/flet-lottie/month)](https://pepy.tech/project/flet-lottie)
-[![license](https://img.shields.io/github/license/flet-dev/flet-lottie.svg)](https://github.com/flet-dev/flet-lottie/blob/main/LICENSE)
+[![pypi](https://img.shields.io/pypi/v/flet-webview.svg)](https://pypi.python.org/pypi/flet-webview)
+[![downloads](https://static.pepy.tech/badge/flet-webview/month)](https://pepy.tech/project/flet-webview)
+[![license](https://img.shields.io/github/license/flet-dev/flet-webview.svg)](https://github.com/flet-dev/flet-webview/blob/main/LICENSE)
 
 A Flet extension to web content in Flet apps using WebView.
 
@@ -25,5 +25,5 @@ This package supports the following platforms:
 ## Example
 
 ```python title="main.py"
---8<-- "examples/lottie_example/src/main.py"
+--8<-- "examples/webview_example/src/main.py"
 ``` 
