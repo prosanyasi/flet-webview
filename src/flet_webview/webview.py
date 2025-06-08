@@ -18,7 +18,8 @@ class WebView(ft.ConstrainedControl):
     """
     Easily load webpages while allowing user interaction.
 
-    The `WebView` control is designed exclusively for macOS, Web, iOS and Android platforms.
+    Note:
+        Works only on the following platforms: iOS, Android, macOS and Web.
     """
 
     url: str
@@ -41,78 +42,86 @@ class WebView(ft.ConstrainedControl):
     """
     Fires soon as the first loading process of the webview page is started.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument's `data` property is of type `str` and contains the URL.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_page_ended: ft.OptionalControlEventCallable = None
     """
     Fires when all the webview page loading processes are ended.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument's `data` property is of type `str` and contains the URL.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_web_resource_error: ft.OptionalControlEventCallable = None
     """
     Fires when there is error with loading a webview page resource.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument's `data` property is of type `str` and contains the error message.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_progress: ft.OptionalControlEventCallable = None
     """
     Fires when the progress of the webview page loading is changed.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument's `data` property is of type `int` and contains the progress value.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_url_change: ft.OptionalControlEventCallable = None
     """
     Fires when the URL of the webview page is changed.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument's `data` property is of type `str` and contains the new URL.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_scroll: ft.OptionalEventCallable[WebviewScrollEvent] = None
     """
     Fires when the web page's scroll position changes.
     
-    Works only on the following platforms: iOS and Android.
-    
     Event handler argument is of type `WebviewScrollEvent`.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_console_message: ft.OptionalEventCallable[WebviewConsoleMessageEvent] = None
     """
     Fires when a log message is written to the JavaScript console.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument is of type `WebviewConsoleMessageEvent`.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     on_javascript_alert_dialog: ft.OptionalEventCallable[WebviewJavaScriptEvent] = None
     """
     Fires when the web page attempts to display a JavaScript alert() dialog.
     
-    Works only on the following platforms: iOS, Android and macOS.
-    
     Event handler argument is of type `WebviewJavaScriptEvent`.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
     """
 
     def _check_mobile_or_mac_platform(self):
         """Checks/Validates support for the current platform (iOS, Android, or macOS)."""
         assert self.page is not None, "WebView must be added to page first."
-        if self.page.platform not in [
+        if self.page.web or self.page.platform not in [
             ft.PagePlatform.ANDROID,
             ft.PagePlatform.IOS,
             ft.PagePlatform.MACOS,
@@ -125,7 +134,8 @@ class WebView(ft.ConstrainedControl):
         """
         Reloads the current URL.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.reload_async())
@@ -134,7 +144,8 @@ class WebView(ft.ConstrainedControl):
         """
         Reloads the current URL.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("reload")
@@ -143,7 +154,8 @@ class WebView(ft.ConstrainedControl):
         """
         Whether there's a back history item.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         return await self._invoke_method_async("can_go_back")
@@ -152,7 +164,8 @@ class WebView(ft.ConstrainedControl):
         """
         Whether there's a forward history item.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         return await self._invoke_method_async("can_go_forward")
@@ -161,7 +174,8 @@ class WebView(ft.ConstrainedControl):
         """
         Go back in the history of the webview, if `can_go_back()` is `True`.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.go_back_async())
@@ -170,7 +184,8 @@ class WebView(ft.ConstrainedControl):
         """
         Go back in the history of the webview, if `can_go_back()` is `True`.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("go_back")
@@ -179,7 +194,8 @@ class WebView(ft.ConstrainedControl):
         """
         Go forward in the history of the webview, if `can_go_forward()` is `True`.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.go_forward_async())
@@ -188,7 +204,8 @@ class WebView(ft.ConstrainedControl):
         """
         Go forward in the history of the webview, if `can_go_forward()` is `True`.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("go_forward")
@@ -197,7 +214,8 @@ class WebView(ft.ConstrainedControl):
         """
         Enable zooming using the on-screen zoom controls and gestures.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.enable_zoom_async())
@@ -206,7 +224,8 @@ class WebView(ft.ConstrainedControl):
         """
         Enable zooming using the on-screen zoom controls and gestures.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("enable_zoom")
@@ -215,7 +234,8 @@ class WebView(ft.ConstrainedControl):
         """
         Disable zooming using the on-screen zoom controls and gestures.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.disable_zoom_async())
@@ -224,7 +244,8 @@ class WebView(ft.ConstrainedControl):
         """
         Disable zooming using the on-screen zoom controls and gestures.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("disable_zoom")
@@ -238,7 +259,8 @@ class WebView(ft.ConstrainedControl):
             - Cache API caches. Service workers tend to use this cache.
             - Application cache
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.clear_cache_async())
@@ -252,7 +274,8 @@ class WebView(ft.ConstrainedControl):
             - Cache API caches. Service workers tend to use this cache.
             - Application cache
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("clear_cache")
@@ -261,7 +284,8 @@ class WebView(ft.ConstrainedControl):
         """
         Clears the local storage used by the WebView.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.clear_local_storage_async())
@@ -270,7 +294,8 @@ class WebView(ft.ConstrainedControl):
         """
         Clears the local storage used by the WebView.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("clear_local_storage")
@@ -279,7 +304,8 @@ class WebView(ft.ConstrainedControl):
         """
         Returns the current URL that the WebView is displaying or `None` if no URL was ever loaded.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         return await self._invoke_method_async("get_current_url")
@@ -288,7 +314,8 @@ class WebView(ft.ConstrainedControl):
         """
         Returns the title of the currently loaded page.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         return await self._invoke_method_async("get_title")
@@ -297,7 +324,8 @@ class WebView(ft.ConstrainedControl):
         """
         Returns the value used for the HTTP `User-Agent:` request header.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         return await self._invoke_method_async("get_user_agent")
@@ -306,9 +334,11 @@ class WebView(ft.ConstrainedControl):
         """
         Loads the provided local file.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            absolute_path (str): The absolute path to the file.
 
-        :param absolute_path: The absolute path to the file.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.load_file_async(absolute_path))
@@ -317,9 +347,11 @@ class WebView(ft.ConstrainedControl):
         """
         Loads the provided local file.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            absolute_path (str): The absolute path to the file.
 
-        :param absolute_path: The absolute path to the file.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("load_file", arguments={"path": absolute_path})
@@ -328,10 +360,9 @@ class WebView(ft.ConstrainedControl):
         """
         Makes an HTTP request and loads the response in the webview.
 
-        Works only on the following platforms: iOS, Android and macOS.
-
-        :param url: The URL to load.
-        :param method: The HTTP method to use. Defaults to `RequestMethod.GET`.
+        Args:
+            url (str): The URL to load.
+            method (RequestMethod): The HTTP method to use. Defaults to `RequestMethod.GET`.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.load_request_async(url, method))
@@ -342,10 +373,12 @@ class WebView(ft.ConstrainedControl):
         """
         Makes an HTTP request and loads the response in the webview.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            url (str): The URL to load.
+            method (RequestMethod): The HTTP method to use. Defaults to `RequestMethod.GET`.
 
-        :param url: The URL to load.
-        :param method: The HTTP method to use. Defaults to `RequestMethod.GET`.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async(
@@ -356,9 +389,11 @@ class WebView(ft.ConstrainedControl):
         """
         Runs the given JavaScript in the context of the current page.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            value (str: The JavaScript code to run.
 
-        :param value: The JavaScript code to run.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.run_javascript_async(value))
@@ -367,9 +402,11 @@ class WebView(ft.ConstrainedControl):
         """
         Runs the given JavaScript in the context of the current page.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            value (str): The JavaScript code to run.
 
-        :param value: The JavaScript code to run.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("run_javascript", arguments={"value": value})
@@ -378,10 +415,12 @@ class WebView(ft.ConstrainedControl):
         """
         Loads the provided HTML string.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            value (str): The HTML string to load.
+            base_url (str, optional): The base URL to use when resolving relative URLs within the value.
 
-        :param value: The HTML string to load.
-        :param base_url: The base URL to use when resolving relative URLs within the value.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.load_html_async(value, base_url))
@@ -390,10 +429,12 @@ class WebView(ft.ConstrainedControl):
         """
         Loads the provided HTML string.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            value (str): The HTML string to load.
+            base_url (str, optional): The base URL to use when resolving relative URLs within the value.
 
-        :param value: The HTML string to load.
-        :param base_url: The base URL to use when resolving relative URLs within the value.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async(
@@ -404,10 +445,12 @@ class WebView(ft.ConstrainedControl):
         """
         Scroll to the provided position of webview pixels.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            x (int): The x-coordinate of the scroll position.
+            y (int): The y-coordinate of the scroll position.
 
-        :param x: The x-coordinate of the scroll position.
-        :param y: The y-coordinate of the scroll position.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.scroll_to_async(x, y))
@@ -416,10 +459,12 @@ class WebView(ft.ConstrainedControl):
         """
         Scroll to the provided position of webview pixels.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            x (int): The x-coordinate of the scroll position.
+            y (int): The y-coordinate of the scroll position.
 
-        :param x: The x-coordinate of the scroll position.
-        :param y: The y-coordinate of the scroll position.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("scroll_to", arguments={"x": x, "y": y})
@@ -428,10 +473,12 @@ class WebView(ft.ConstrainedControl):
         """
         Scroll by the provided number of webview pixels.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            x (int): The number of pixels to scroll by on the x-axis.
+            y (int): The number of pixels to scroll by on the y-axis.
 
-        :param x: The number of pixels to scroll by on the x-axis.
-        :param y: The number of pixels to scroll by on the y-axis.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.scroll_by_async(x, y))
@@ -440,10 +487,12 @@ class WebView(ft.ConstrainedControl):
         """
         Scroll by the provided number of webview pixels.
 
-        Works only on the following platforms: iOS, Android and macOS.
+        Args:
+            x (int): The number of pixels to scroll by on the x-axis.
+            y (int): The number of pixels to scroll by on the y-axis.
 
-        :param x: The number of pixels to scroll by on the x-axis.
-        :param y: The number of pixels to scroll by on the y-axis.
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         await self._invoke_method_async("scroll_by", arguments={"x": x, "y": y})
