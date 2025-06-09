@@ -63,7 +63,7 @@ extra:
     provider: mike
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/flet-dev/flet-permission-handler
+      link: https://github.com/flet-dev
     - icon: fontawesome/brands/discord
       link: https://discord.gg/bCFXYgZR3b
     - icon: fontawesome/brands/x-twitter
@@ -79,9 +79,10 @@ nav:
       - Types:
           - LogLevelSeverity: types/log_level_severity.md
           - RequestMethod: types/request_method.md
-          - WebviewConsoleMessageEvent: types/webview_console_message_event.md
-          - WebviewJavaScriptEvent: types/webview_javascript_event.md
-          - WebviewScrollEvent: types/webview_scroll_event.md
+          - Events:
+            - WebviewConsoleMessageEvent: types/webview_console_message_event.md
+            - WebviewJavaScriptEvent: types/webview_javascript_event.md
+            - WebviewScrollEvent: types/webview_scroll_event.md
   - Changelog: changelog.md
   - License: license.md
 
@@ -92,6 +93,10 @@ validation:
   unrecognized_links: warn
   anchors: warn
 
+watch:
+  - docs
+  - src
+
 # Plugins
 plugins:
   # - footnotes
@@ -101,10 +106,11 @@ plugins:
       alias_type: symlink
   - glightbox
   - mkdocstrings:
-      default_handler: python
+      default_handler: python_xref
       handlers:
-        python:
+        python_xref:
           options:
+            relative_crossrefs: true
             docstring_style: google
             show_signature_annotations: true
             signature_crossrefs: true
@@ -118,6 +124,7 @@ plugins:
             show_category_heading: false
             show_labels: false
             show_if_no_docstring: true
+            docstring_section_style: spacy
             filters:
               - "!^_"   # Exclude private members starting with only one underscore
               - "!before_update"
