@@ -35,7 +35,7 @@ class WebView(ft.ConstrainedControl):
     prevent_links: Optional[List[str]] = None
     """List of url-prefixes that should not be followed/loaded/downloaded."""
 
-    bgcolor: ft.OptionalColorValue = None
+    bgcolor: Optional[ft.ColorValue] = None
     """Defines the background color of the WebView."""
 
     on_page_started: ft.OptionalControlEventCallable = None
