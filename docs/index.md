@@ -29,24 +29,21 @@ This package supports the following platforms:
 To install the `flet-webview` package and add it to your project dependencies:
 
 === "uv"
-
-```bash
-uv add flet-webview
-```
+    ```bash
+    uv add flet-webview
+    ```
 
 === "pip"
-
-```bash
-pip install flet-webview
-```
-
-    You will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
+    ```bash
+    pip install flet-webview  # (1)!
+    ```
 
 === "poetry"
+    ```bash
+    poetry add flet-webview
+    ```
 
-```bash
-poetry add flet-webview
-```
+1. After this, you will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
 
 ## Example
 
