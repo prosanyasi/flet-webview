@@ -45,7 +45,7 @@ class LogLevelSeverity(Enum):
 
 
 @dataclass
-class WebViewScrollEvent(ft.ControlEvent):
+class WebViewScrollEvent(ft.Event[ft.EventControlType]):
     x: float
     """The value of the horizontal offset with the origin being at the leftmost of the `WebView`."""
 
@@ -54,7 +54,7 @@ class WebViewScrollEvent(ft.ControlEvent):
 
 
 @dataclass
-class WebViewConsoleMessageEvent(ft.ControlEvent):
+class WebViewConsoleMessageEvent(ft.Event[ft.EventControlType]):
     message: str
     """The message written to the console."""
 
@@ -63,7 +63,7 @@ class WebViewConsoleMessageEvent(ft.ControlEvent):
 
 
 @dataclass
-class WebViewJavaScriptEvent(ft.ControlEvent):
+class WebViewJavaScriptEvent(ft.Event[ft.EventControlType]):
     message: str
     """The message to be displayed in the window."""
 

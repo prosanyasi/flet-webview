@@ -38,7 +38,7 @@ class WebView(ft.ConstrainedControl):
     bgcolor: Optional[ft.ColorValue] = None
     """Defines the background color of the WebView."""
 
-    on_page_started: ft.OptionalControlEventCallable = None
+    on_page_started: ft.OptionalControlEventHandler["WebView"] = None
     """
     Fires soon as the first loading process of the webview page is started.
     
@@ -48,7 +48,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_page_ended: ft.OptionalControlEventCallable = None
+    on_page_ended: ft.OptionalControlEventHandler["WebView"] = None
     """
     Fires when all the webview page loading processes are ended.
     
@@ -58,7 +58,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_web_resource_error: ft.OptionalControlEventCallable = None
+    on_web_resource_error: ft.OptionalControlEventHandler["WebView"] = None
     """
     Fires when there is error with loading a webview page resource.
     
@@ -68,7 +68,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_progress: ft.OptionalControlEventCallable = None
+    on_progress: ft.OptionalControlEventHandler["WebView"] = None
     """
     Fires when the progress of the webview page loading is changed.
     
@@ -78,7 +78,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_url_change: ft.OptionalControlEventCallable = None
+    on_url_change: ft.OptionalControlEventHandler["WebView"] = None
     """
     Fires when the URL of the webview page is changed.
     
@@ -88,7 +88,7 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_scroll: ft.OptionalEventCallable[WebViewScrollEvent] = None
+    on_scroll: ft.OptionalEventHandler[WebViewScrollEvent["WebView"]] = None
     """
     Fires when the web page's scroll position changes.
     
@@ -98,7 +98,9 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_console_message: ft.OptionalEventCallable[WebViewConsoleMessageEvent] = None
+    on_console_message: ft.OptionalEventHandler[
+        WebViewConsoleMessageEvent["WebView"]
+    ] = None
     """
     Fires when a log message is written to the JavaScript console.
     
@@ -108,7 +110,9 @@ class WebView(ft.ConstrainedControl):
         Works only on the following platforms: iOS, Android and macOS.
     """
 
-    on_javascript_alert_dialog: ft.OptionalEventCallable[WebViewJavaScriptEvent] = None
+    on_javascript_alert_dialog: ft.OptionalEventHandler[
+        WebViewJavaScriptEvent["WebView"]
+    ] = None
     """
     Fires when the web page attempts to display a JavaScript alert() dialog.
     
@@ -362,7 +366,7 @@ class WebView(ft.ConstrainedControl):
 
         Args:
             url (str): The URL to load.
-            method (RequestMethod): The HTTP method to use. Defaults to `RequestMethod.GET`.
+            method (RequestMethod): The HTTP method to use.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.load_request_async(url, method))
@@ -375,7 +379,7 @@ class WebView(ft.ConstrainedControl):
 
         Args:
             url (str): The URL to load.
-            method (RequestMethod): The HTTP method to use. Defaults to `RequestMethod.GET`.
+            method (RequestMethod): The HTTP method to use.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
