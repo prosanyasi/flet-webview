@@ -38,12 +38,13 @@ To install the `flet-webview` package and add it to your project dependencies:
     pip install flet-webview  # (1)!
     ```
 
+    1. After this, you will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
+
 === "poetry"
     ```bash
     poetry add flet-webview
     ```
 
-1. After this, you will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
 
 ## Example
 

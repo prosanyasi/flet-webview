@@ -158,6 +158,9 @@ class WebView(ft.ConstrainedControl):
         """
         Whether there's a back history item.
 
+        Returns:
+            `True` if there is a back history item, `False` otherwise.
+
         Note:
             Works only on the following platforms: iOS, Android and macOS.
         """
@@ -167,6 +170,9 @@ class WebView(ft.ConstrainedControl):
     async def can_go_forward(self) -> bool:
         """
         Whether there's a forward history item.
+
+        Returns:
+            `True` if there is a forward history item, `False` otherwise.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -308,6 +314,9 @@ class WebView(ft.ConstrainedControl):
         """
         Returns the current URL that the WebView is displaying or `None` if no URL was ever loaded.
 
+        Returns:
+            The current URL that the WebView is displaying or `None` if no URL was ever loaded.
+
         Note:
             Works only on the following platforms: iOS, Android and macOS.
         """
@@ -317,6 +326,9 @@ class WebView(ft.ConstrainedControl):
     async def get_title_async(self) -> Optional[str]:
         """
         Returns the title of the currently loaded page.
+
+        Returns:
+            The title of the currently loaded page.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -328,45 +340,48 @@ class WebView(ft.ConstrainedControl):
         """
         Returns the value used for the HTTP `User-Agent:` request header.
 
+        Returns:
+            The value used for the HTTP `User-Agent:` request header.
+
         Note:
             Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
         return await self._invoke_method_async("get_user_agent")
 
-    def load_file(self, absolute_path: str):
+    def load_file(self, path: str):
         """
         Loads the provided local file.
 
         Args:
-            absolute_path (str): The absolute path to the file.
+            path: The absolute path to the file.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
-        asyncio.create_task(self.load_file_async(absolute_path))
+        asyncio.create_task(self.load_file_async(path))
 
-    async def load_file_async(self, absolute_path: str):
+    async def load_file_async(self, path: str):
         """
         Loads the provided local file.
 
         Args:
-            absolute_path (str): The absolute path to the file.
+            path: The absolute path to the file.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
         """
         self._check_mobile_or_mac_platform()
-        await self._invoke_method_async("load_file", arguments={"path": absolute_path})
+        await self._invoke_method_async("load_file", arguments={"path": path})
 
     def load_request(self, url: str, method: RequestMethod = RequestMethod.GET):
         """
         Makes an HTTP request and loads the response in the webview.
 
         Args:
-            url (str): The URL to load.
-            method (RequestMethod): The HTTP method to use.
+            url: The URL to load.
+            method: The HTTP method to use.
         """
         self._check_mobile_or_mac_platform()
         asyncio.create_task(self.load_request_async(url, method))
@@ -378,8 +393,8 @@ class WebView(ft.ConstrainedControl):
         Makes an HTTP request and loads the response in the webview.
 
         Args:
-            url (str): The URL to load.
-            method (RequestMethod): The HTTP method to use.
+            url: The URL to load.
+            method: The HTTP method to use.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -394,7 +409,7 @@ class WebView(ft.ConstrainedControl):
         Runs the given JavaScript in the context of the current page.
 
         Args:
-            value (str: The JavaScript code to run.
+            value: The JavaScript code to run.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -407,7 +422,7 @@ class WebView(ft.ConstrainedControl):
         Runs the given JavaScript in the context of the current page.
 
         Args:
-            value (str): The JavaScript code to run.
+            value: The JavaScript code to run.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -420,8 +435,8 @@ class WebView(ft.ConstrainedControl):
         Loads the provided HTML string.
 
         Args:
-            value (str): The HTML string to load.
-            base_url (str, optional): The base URL to use when resolving relative URLs within the value.
+            value: The HTML string to load.
+            base_url: The base URL to use when resolving relative URLs within the value.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -434,8 +449,8 @@ class WebView(ft.ConstrainedControl):
         Loads the provided HTML string.
 
         Args:
-            value (str): The HTML string to load.
-            base_url (str, optional): The base URL to use when resolving relative URLs within the value.
+            value: The HTML string to load.
+            base_url: The base URL to use when resolving relative URLs within the value.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -450,8 +465,8 @@ class WebView(ft.ConstrainedControl):
         Scroll to the provided position of webview pixels.
 
         Args:
-            x (int): The x-coordinate of the scroll position.
-            y (int): The y-coordinate of the scroll position.
+            x: The x-coordinate of the scroll position.
+            y: The y-coordinate of the scroll position.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -464,8 +479,8 @@ class WebView(ft.ConstrainedControl):
         Scroll to the provided position of webview pixels.
 
         Args:
-            x (int): The x-coordinate of the scroll position.
-            y (int): The y-coordinate of the scroll position.
+            x: The x-coordinate of the scroll position.
+            y: The y-coordinate of the scroll position.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -478,8 +493,8 @@ class WebView(ft.ConstrainedControl):
         Scroll by the provided number of webview pixels.
 
         Args:
-            x (int): The number of pixels to scroll by on the x-axis.
-            y (int): The number of pixels to scroll by on the y-axis.
+            x: The number of pixels to scroll by on the x-axis.
+            y: The number of pixels to scroll by on the y-axis.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
@@ -492,8 +507,8 @@ class WebView(ft.ConstrainedControl):
         Scroll by the provided number of webview pixels.
 
         Args:
-            x (int): The number of pixels to scroll by on the x-axis.
-            y (int): The number of pixels to scroll by on the y-axis.
+            x: The number of pixels to scroll by on the x-axis.
+            y: The number of pixels to scroll by on the y-axis.
 
         Note:
             Works only on the following platforms: iOS, Android and macOS.
