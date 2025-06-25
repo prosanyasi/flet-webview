@@ -4,7 +4,7 @@
 [![downloads](https://static.pepy.tech/badge/flet-webview/month)](https://pepy.tech/project/flet-webview)
 [![license](https://img.shields.io/github/license/flet-dev/flet-webview.svg)](https://github.com/flet-dev/flet-webview/blob/main/LICENSE)
 
-A Flet extension to web content in Flet apps using WebView.
+A [Flet](https://flet.dev) extension for displaying web content in a WebView.
 
 It is based on the [webview_flutter](https://pub.dev/packages/webview_flutter)
 and [webview_flutter_web](https://pub.dev/packages/webview_flutter_web) Flutter packages.

@@ -1,28 +1,51 @@
-# WebView control for Flet
+# flet-webview
 
-`WebView` control for Flet.
+[![pypi](https://img.shields.io/pypi/v/flet-webview.svg)](https://pypi.python.org/pypi/flet-webview)
+[![downloads](https://static.pepy.tech/badge/flet-webview/month)](https://pepy.tech/project/flet-webview)
+[![license](https://img.shields.io/github/license/flet-dev/flet-webview.svg)](https://github.com/flet-dev/flet-webview/blob/main/LICENSE)
 
-## Usage
+A [Flet](https://flet.dev) extension for displaying web content in a WebView.
 
-Add `flet-webview` as dependency (`pyproject.toml` or `requirements.txt`) to your Flet project.
+It is based on the [webview_flutter](https://pub.dev/packages/webview_flutter)
+and [webview_flutter_web](https://pub.dev/packages/webview_flutter_web) Flutter packages.
 
-## Example
+## Documentation
 
-```py
+Detailed documentation to this package can be found [here](https://flet-dev.github.io/flet-webview/).
 
-import flet as ft
+## Platform Support
 
-import flet_webview as fwv
+This package supports the following platforms:
 
-def main(page: ft.Page):
-    wv = fwv.WebView(
-        url="https://flet.dev",
-        on_page_started=lambda _: print("Page started"),
-        on_page_ended=lambda _: print("Page ended"),
-        on_web_resource_error=lambda e: print("Page error:", e.data),
-        expand=True,
-    )
-    page.add(wv)
+| Platform | Supported |
+|----------|:---------:|
+| Windows  |     ❌     |
+| macOS    |     ✅     |
+| Linux    |     ❌     |
+| iOS      |     ✅     |
+| Android  |     ✅     |
+| Web      |     ✅     |
 
-ft.app(main)
-```
+## Installation
+
+To install the `flet-webview` package and add it to your project dependencies:
+
+- Using `uv`:
+    ```bash
+    uv add flet-webview
+    ```
+
+- Using `pip`:
+    ```bash
+    pip install flet-webview
+    ```
+    After this, you will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
+
+- Using `poetry`:
+    ```bash
+    poetry add flet-webview
+    ```
+
+## Examples
+
+For examples, see [this](./examples)
