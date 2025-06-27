@@ -1,498 +1,517 @@
-import json
-import warnings
-from enum import Enum
-from typing import Any, Optional, Union
+import asyncio
+from typing import List, Optional
 
-from flet.core.animation import AnimationValue
-from flet.core.badge import BadgeValue
-from flet.core.constrained_control import ConstrainedControl
-from flet.core.control import OptionalNumber
-from flet.core.control_event import ControlEvent
-from flet.core.event_handler import EventHandler
-from flet.core.exceptions import FletUnsupportedPlatformException
-from flet.core.ref import Ref
-from flet.core.tooltip import TooltipValue
-from flet.core.types import (
-    ColorEnums,
-    ColorValue,
-    OffsetValue,
-    OptionalControlEventCallable,
-    OptionalEventCallable,
-    PagePlatform,
-    ResponsiveNumber,
-    RotateValue,
-    ScaleValue,
+import flet as ft
+
+from .types import (
+    RequestMethod,
+    WebViewConsoleMessageEvent,
+    WebViewJavaScriptEvent,
+    WebViewScrollEvent,
 )
 
-
-class WebviewRequestMethod(Enum):
-    GET = "get"
-    POST = "post"
+__all__ = ["WebView"]
 
 
-class WebviewLogLevelSeverity(Enum):
-    ERROR = "error"
-    WARNING = "warning"
-    DEBUG = "debug"
-    INFO = "info"
-    LOG = "log"
-
-
-class WebviewScrollEvent(ControlEvent):
-    def __init__(self, e: ControlEvent):
-        super().__init__(e.target, e.name, e.data, e.control, e.page)
-        d = json.loads(e.data)
-        self.x: float = d.get("x", 0)
-        self.y: float = d.get("y", 0)
-
-
-class WebviewConsoleMessageEvent(ControlEvent):
-    def __init__(self, e: ControlEvent):
-        super().__init__(e.target, e.name, e.data, e.control, e.page)
-        d = json.loads(e.data)
-        self.message: str = d.get("message")
-        self.severity_level: WebviewLogLevelSeverity = WebviewLogLevelSeverity(
-            d.get("level")
-        )
-
-
-class WebviewJavaScriptEvent(ControlEvent):
-    def __init__(self, e: ControlEvent):
-        super().__init__(e.target, e.name, e.data, e.control, e.page)
-        d = json.loads(e.data)
-        self.message: str = d.get("message")
-        self.url: str = d.get("url")
-
-
-class WebView(ConstrainedControl):
+@ft.control("WebView")
+class WebView(ft.ConstrainedControl):
     """
     Easily load webpages while allowing user interaction.
 
-    The `WebView` control is designed exclusively for iOS and Android platforms.
-
-    ## Examples
-    A simple webview implementation using this class could be like:
-
-    ```python
-    import flet as ft
-
-    import flet_web_view as fwv
-
-    def main(page: ft.Page):
-        wv = fwv.WebView(
-            "https://flet.dev",
-            expand=True,
-            on_page_started=lambda _: print("Page started"),
-            on_page_ended=lambda _: print("Page ended"),
-            on_web_resource_error=lambda e: print("Page error:", e.data),
-        )
-        page.add(wv)
-
-    ft.app(main)
-    ```
-
-    ## Properties
-
-    ### `url`
-
-    Start the webview by loading the `url` value.
-
-    ### `javascript_enabled`
-
-    Enable or disable the javascript execution of the page. Note that disabling the javascript execution of the page may result unexpected webpage behaviour.
-
-    ### `prevent_link`
-
-    Specify a link to prevent it from downloading.
-
-    ### `bgcolor`
-
-    Set the background color of the webview.
-
-    ## Events
-
-    ### `on_page_started`
-
-    Fires soon as the first loading process of the webpage is started.
-
-    ### `on_page_ended`
-
-    Fires when all the webpage loading processes are ended.
-
-    ### `on_web_resource_error`
-
-    Fires when there is error with loading a webpage resource.
-
-    View docs: [WebView](https://flet.dev/docs/controls/webview)
+    Note:
+        Works only on the following platforms: iOS, Android, macOS and Web.
     """
 
-    def __init__(
-        self,
-        url: str,
-        javascript_enabled: Optional[bool] = None,
-        enable_javascript: Optional[bool] = None,
-        prevent_link: Optional[str] = None,
-        bgcolor: Optional[ColorValue] = None,
-        on_page_started: OptionalControlEventCallable = None,
-        on_page_ended: OptionalControlEventCallable = None,
-        on_web_resource_error: OptionalControlEventCallable = None,
-        on_progress: OptionalControlEventCallable = None,
-        on_url_change: OptionalControlEventCallable = None,
-        on_scroll: OptionalEventCallable[WebviewScrollEvent] = None,
-        on_console_message: OptionalEventCallable[WebviewConsoleMessageEvent] = None,
-        on_javascript_alert_dialog: OptionalEventCallable[
-            WebviewJavaScriptEvent
-        ] = None,
-        #
-        # ConstrainedControl
-        #
-        ref: Optional[Ref] = None,
-        key: Optional[str] = None,
-        width: OptionalNumber = None,
-        height: OptionalNumber = None,
-        left: OptionalNumber = None,
-        top: OptionalNumber = None,
-        right: OptionalNumber = None,
-        bottom: OptionalNumber = None,
-        expand: Union[None, bool, int] = None,
-        expand_loose: Optional[bool] = None,
-        col: Optional[ResponsiveNumber] = None,
-        opacity: OptionalNumber = None,
-        rotate: RotateValue = None,
-        scale: ScaleValue = None,
-        offset: OffsetValue = None,
-        aspect_ratio: OptionalNumber = None,
-        animate_opacity: Optional[AnimationValue] = None,
-        animate_size: Optional[AnimationValue] = None,
-        animate_position: Optional[AnimationValue] = None,
-        animate_rotation: Optional[AnimationValue] = None,
-        animate_scale: Optional[AnimationValue] = None,
-        animate_offset: Optional[AnimationValue] = None,
-        on_animation_end: OptionalControlEventCallable = None,
-        tooltip: TooltipValue = None,
-        badge: Optional[BadgeValue] = None,
-        visible: Optional[bool] = None,
-        disabled: Optional[bool] = None,
-        data: Any = None,
-    ):
-        ConstrainedControl.__init__(
-            self,
-            ref=ref,
-            key=key,
-            width=width,
-            height=height,
-            left=left,
-            top=top,
-            right=right,
-            bottom=bottom,
-            expand=expand,
-            expand_loose=expand_loose,
-            col=col,
-            opacity=opacity,
-            rotate=rotate,
-            scale=scale,
-            offset=offset,
-            aspect_ratio=aspect_ratio,
-            animate_opacity=animate_opacity,
-            animate_size=animate_size,
-            animate_position=animate_position,
-            animate_rotation=animate_rotation,
-            animate_scale=animate_scale,
-            animate_offset=animate_offset,
-            on_animation_end=on_animation_end,
-            tooltip=tooltip,
-            badge=badge,
-            visible=visible,
-            disabled=disabled,
-            data=data,
-        )
-        self.__on_scroll = EventHandler(lambda e: WebviewScrollEvent(e))
-        self._add_event_handler("scroll", self.__on_scroll.get_handler())
-        self.__on_console_message = EventHandler(
-            lambda e: WebviewConsoleMessageEvent(e)
-        )
-        self._add_event_handler(
-            "console_message", self.__on_console_message.get_handler()
-        )
-        self.__on_javascript_alert_dialog = EventHandler(
-            lambda e: WebviewJavaScriptEvent(e)
-        )
-        self._add_event_handler(
-            "javascript_alert_dialog", self.__on_javascript_alert_dialog.get_handler()
-        )
+    url: str
+    """The URL of the web page to load."""
 
-        self.url = url
-        self.javascript_enabled = javascript_enabled
-        self.enable_javascript = enable_javascript
-        self.prevent_link = prevent_link
-        self.bgcolor = bgcolor
-        self.on_page_started = on_page_started
-        self.on_page_ended = on_page_ended
-        self.on_web_resource_error = on_web_resource_error
-        self.on_progress = on_progress
-        self.on_url_change = on_url_change
-        self.on_scroll = on_scroll
-        self.on_console_message = on_console_message
-        self.on_javascript_alert_dialog = on_javascript_alert_dialog
+    enable_javascript: Optional[bool] = None
+    """
+    Enable or disable the JavaScript execution on the page. 
+    
+    Note that disabling the JavaScript execution on the page may result to unexpected web page behaviour.
+    """
 
-    def _get_control_name(self):
-        return "webview"
+    prevent_links: Optional[List[str]] = None
+    """List of url-prefixes that should not be followed/loaded/downloaded."""
+
+    bgcolor: Optional[ft.ColorValue] = None
+    """Defines the background color of the WebView."""
+
+    on_page_started: ft.OptionalControlEventHandler["WebView"] = None
+    """
+    Fires soon as the first loading process of the webview page is started.
+    
+    Event handler argument's `data` property is of type `str` and contains the URL.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_page_ended: ft.OptionalControlEventHandler["WebView"] = None
+    """
+    Fires when all the webview page loading processes are ended.
+    
+    Event handler argument's `data` property is of type `str` and contains the URL.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_web_resource_error: ft.OptionalControlEventHandler["WebView"] = None
+    """
+    Fires when there is error with loading a webview page resource.
+    
+    Event handler argument's `data` property is of type `str` and contains the error message.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_progress: ft.OptionalControlEventHandler["WebView"] = None
+    """
+    Fires when the progress of the webview page loading is changed.
+    
+    Event handler argument's `data` property is of type `int` and contains the progress value.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_url_change: ft.OptionalControlEventHandler["WebView"] = None
+    """
+    Fires when the URL of the webview page is changed.
+    
+    Event handler argument's `data` property is of type `str` and contains the new URL.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_scroll: ft.OptionalEventHandler[WebViewScrollEvent["WebView"]] = None
+    """
+    Fires when the web page's scroll position changes.
+    
+    Event handler argument is of type `WebviewScrollEvent`.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_console_message: ft.OptionalEventHandler[
+        WebViewConsoleMessageEvent["WebView"]
+    ] = None
+    """
+    Fires when a log message is written to the JavaScript console.
+    
+    Event handler argument is of type `WebviewConsoleMessageEvent`.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
+
+    on_javascript_alert_dialog: ft.OptionalEventHandler[
+        WebViewJavaScriptEvent["WebView"]
+    ] = None
+    """
+    Fires when the web page attempts to display a JavaScript alert() dialog.
+    
+    Event handler argument is of type `WebviewJavaScriptEvent`.
+    
+    Note:
+        Works only on the following platforms: iOS, Android and macOS.
+    """
 
     def _check_mobile_or_mac_platform(self):
+        """Checks/Validates support for the current platform (iOS, Android, or macOS)."""
         assert self.page is not None, "WebView must be added to page first."
-        if self.page.platform not in [
-            PagePlatform.ANDROID,
-            PagePlatform.IOS,
-            PagePlatform.MACOS,
+        if self.page.web or self.page.platform not in [
+            ft.PagePlatform.ANDROID,
+            ft.PagePlatform.IOS,
+            ft.PagePlatform.MACOS,
         ]:
-            raise FletUnsupportedPlatformException(
+            raise ft.FletUnsupportedPlatformException(
                 "This method is supported on Android, iOS and macOS platforms only."
             )
 
     def reload(self):
-        self._check_mobile_or_mac_platform()
-        self.invoke_method("reload")
+        """
+        Reloads the current URL.
 
-    def can_go_back(self, wait_timeout: OptionalNumber = 10) -> bool:
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        return (
-            self.invoke_method(
-                "can_go_back",
-                wait_for_result=True,
-                wait_timeout=wait_timeout,
-            )
-            == "true"
-        )
+        asyncio.create_task(self.reload_async())
 
-    def can_go_forward(self, wait_timeout: OptionalNumber = 10) -> bool:
+    async def reload_async(self):
+        """
+        Reloads the current URL.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        return (
-            self.invoke_method(
-                "can_go_forward",
-                wait_for_result=True,
-                wait_timeout=wait_timeout,
-            )
-            == "true"
-        )
+        await self._invoke_method_async("reload")
+
+    async def can_go_back_async(self) -> bool:
+        """
+        Whether there's a back history item.
+
+        Returns:
+            `True` if there is a back history item, `False` otherwise.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        return await self._invoke_method_async("can_go_back")
+
+    async def can_go_forward(self) -> bool:
+        """
+        Whether there's a forward history item.
+
+        Returns:
+            `True` if there is a forward history item, `False` otherwise.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        return await self._invoke_method_async("can_go_forward")
 
     def go_back(self):
+        """
+        Go back in the history of the webview, if `can_go_back()` is `True`.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("go_back")
+        asyncio.create_task(self.go_back_async())
+
+    async def go_back_async(self):
+        """
+        Go back in the history of the webview, if `can_go_back()` is `True`.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("go_back")
 
     def go_forward(self):
+        """
+        Go forward in the history of the webview, if `can_go_forward()` is `True`.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("go_forward")
+        asyncio.create_task(self.go_forward_async())
+
+    async def go_forward_async(self):
+        """
+        Go forward in the history of the webview, if `can_go_forward()` is `True`.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("go_forward")
 
     def enable_zoom(self):
+        """
+        Enable zooming using the on-screen zoom controls and gestures.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("enable_zoom")
+        asyncio.create_task(self.enable_zoom_async())
+
+    async def enable_zoom_async(self):
+        """
+        Enable zooming using the on-screen zoom controls and gestures.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("enable_zoom")
 
     def disable_zoom(self):
+        """
+        Disable zooming using the on-screen zoom controls and gestures.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("disable_zoom")
+        asyncio.create_task(self.disable_zoom_async())
+
+    async def disable_zoom_async(self):
+        """
+        Disable zooming using the on-screen zoom controls and gestures.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("disable_zoom")
 
     def clear_cache(self):
+        """
+        Clears all caches used by the WebView.
+
+        The following caches are cleared:
+            - Browser HTTP Cache
+            - Cache API caches. Service workers tend to use this cache.
+            - Application cache
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("clear_cache")
+        asyncio.create_task(self.clear_cache_async())
+
+    async def clear_cache_async(self):
+        """
+        Clears all caches used by the WebView.
+
+        The following caches are cleared:
+            - Browser HTTP Cache
+            - Cache API caches. Service workers tend to use this cache.
+            - Application cache
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("clear_cache")
 
     def clear_local_storage(self):
-        self._check_mobile_or_mac_platform()
-        self.invoke_method("clear_local_storage")
+        """
+        Clears the local storage used by the WebView.
 
-    def get_current_url(self, wait_timeout: OptionalNumber = 10) -> Optional[str]:
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        return self.invoke_method(
-            "get_current_url", wait_for_result=True, wait_timeout=wait_timeout
-        )
+        asyncio.create_task(self.clear_local_storage_async())
 
-    def get_title(self, wait_timeout: OptionalNumber = 10) -> Optional[str]:
+    async def clear_local_storage_async(self):
+        """
+        Clears the local storage used by the WebView.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        return self.invoke_method(
-            "get_title", wait_for_result=True, wait_timeout=wait_timeout
-        )
+        await self._invoke_method_async("clear_local_storage")
 
-    def get_user_agent(self, wait_timeout: OptionalNumber = 10) -> Optional[str]:
+    async def get_current_url_async(self) -> Optional[str]:
+        """
+        Returns the current URL that the WebView is displaying or `None` if no URL was ever loaded.
+
+        Returns:
+            The current URL that the WebView is displaying or `None` if no URL was ever loaded.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        return self.invoke_method(
-            "get_user_agent", wait_for_result=True, wait_timeout=wait_timeout
-        )
+        return await self._invoke_method_async("get_current_url")
 
-    def load_file(self, absolute_path: str):
+    async def get_title_async(self) -> Optional[str]:
+        """
+        Returns the title of the currently loaded page.
+
+        Returns:
+            The title of the currently loaded page.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("load_file", arguments={"path": absolute_path})
+        return await self._invoke_method_async("get_title")
 
-    def load_request(
-        self, url: str, method: WebviewRequestMethod = WebviewRequestMethod.GET
+    async def get_user_agent_async(self) -> Optional[str]:
+        """
+        Returns the value used for the HTTP `User-Agent:` request header.
+
+        Returns:
+            The value used for the HTTP `User-Agent:` request header.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        return await self._invoke_method_async("get_user_agent")
+
+    def load_file(self, path: str):
+        """
+        Loads the provided local file.
+
+        Args:
+            path: The absolute path to the file.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        asyncio.create_task(self.load_file_async(path))
+
+    async def load_file_async(self, path: str):
+        """
+        Loads the provided local file.
+
+        Args:
+            path: The absolute path to the file.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("load_file", arguments={"path": path})
+
+    def load_request(self, url: str, method: RequestMethod = RequestMethod.GET):
+        """
+        Makes an HTTP request and loads the response in the webview.
+
+        Args:
+            url: The URL to load.
+            method: The HTTP method to use.
+        """
+        self._check_mobile_or_mac_platform()
+        asyncio.create_task(self.load_request_async(url, method))
+
+    async def load_request_async(
+        self, url: str, method: RequestMethod = RequestMethod.GET
     ):
+        """
+        Makes an HTTP request and loads the response in the webview.
+
+        Args:
+            url: The URL to load.
+            method: The HTTP method to use.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method(
-            "load_request",
-            arguments={"url": url, "method": method.value},
+        await self._invoke_method_async(
+            "load_request", arguments={"url": url, "method": method}
         )
 
     def run_javascript(self, value: str):
+        """
+        Runs the given JavaScript in the context of the current page.
+
+        Args:
+            value: The JavaScript code to run.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("run_javascript", arguments={"value": value})
+        asyncio.create_task(self.run_javascript_async(value))
+
+    async def run_javascript_async(self, value: str):
+        """
+        Runs the given JavaScript in the context of the current page.
+
+        Args:
+            value: The JavaScript code to run.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("run_javascript", arguments={"value": value})
 
     def load_html(self, value: str, base_url: Optional[str] = None):
+        """
+        Loads the provided HTML string.
+
+        Args:
+            value: The HTML string to load.
+            base_url: The base URL to use when resolving relative URLs within the value.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method(
+        asyncio.create_task(self.load_html_async(value, base_url))
+
+    async def load_html_async(self, value: str, base_url: Optional[str] = None):
+        """
+        Loads the provided HTML string.
+
+        Args:
+            value: The HTML string to load.
+            base_url: The base URL to use when resolving relative URLs within the value.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async(
             "load_html", arguments={"value": value, "base_url": base_url}
         )
 
     def scroll_to(self, x: int, y: int):
+        """
+        Scroll to the provided position of webview pixels.
+
+        Args:
+            x: The x-coordinate of the scroll position.
+            y: The y-coordinate of the scroll position.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("scroll_to", arguments={"x": str(x), "y": str(y)})
+        asyncio.create_task(self.scroll_to_async(x, y))
+
+    async def scroll_to_async(self, x: int, y: int):
+        """
+        Scroll to the provided position of webview pixels.
+
+        Args:
+            x: The x-coordinate of the scroll position.
+            y: The y-coordinate of the scroll position.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("scroll_to", arguments={"x": x, "y": y})
 
     def scroll_by(self, x: int, y: int):
+        """
+        Scroll by the provided number of webview pixels.
+
+        Args:
+            x: The number of pixels to scroll by on the x-axis.
+            y: The number of pixels to scroll by on the y-axis.
+
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
         self._check_mobile_or_mac_platform()
-        self.invoke_method("scroll_by", arguments={"x": str(x), "y": str(y)})
+        asyncio.create_task(self.scroll_by_async(x, y))
 
-    # bgcolor
-    @property
-    def bgcolor(self) -> Optional[ColorValue]:
-        return self.__bgcolor
+    async def scroll_by_async(self, x: int, y: int):
+        """
+        Scroll by the provided number of webview pixels.
 
-    @bgcolor.setter
-    def bgcolor(self, value: Optional[ColorValue]):
-        self.__bgcolor = value
-        self._set_enum_attr("bgcolor", value, ColorEnums)
+        Args:
+            x: The number of pixels to scroll by on the x-axis.
+            y: The number of pixels to scroll by on the y-axis.
 
-    # url
-    @property
-    def url(self) -> str:
-        return self._get_attr("url")
-
-    @url.setter
-    def url(self, value: str):
-        self._set_attr("url", value)
-        if self.page:
-            self.load_request(value, WebviewRequestMethod.GET)
-
-    # javascript_enabled
-    @property
-    def javascript_enabled(self) -> bool:
-        warnings.warn(
-            f"javascript_enabled is deprecated since version 0.25.0 "
-            f"and will be removed in version 0.28.0. Use enable_javascript instead.",
-            category=DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._get_attr("javascriptEnabled", data_type="bool", def_value=False)
-
-    @javascript_enabled.setter
-    def javascript_enabled(self, value: Optional[bool]):
-        self._set_attr("javascriptEnabled", value)
-        if value is not None:
-            warnings.warn(
-                f"javascript_enabled is deprecated since version 0.25.0 "
-                f"and will be removed in version 0.28.0. Use enable_javascript instead.",
-                category=DeprecationWarning,
-                stacklevel=2,
-            )
-            if self.page:
-                self.invoke_method(
-                    "set_javascript_mode",
-                    arguments={"value": str(value)},
-                )
-
-    # enable_javascript
-    @property
-    def enable_javascript(self) -> bool:
-        return self._get_attr("enableJavascript", data_type="bool", def_value=False)
-
-    @enable_javascript.setter
-    def enable_javascript(self, value: Optional[bool]):
-        self._set_attr("enableJavascript", value)
-        if self.page and value is not None:
-            self.invoke_method(
-                "set_javascript_mode",
-                arguments={"value": str(value)},
-            )
-
-    # prevent_link
-    @property
-    def prevent_link(self) -> str:
-        return self._get_attr("prevent_link")
-
-    @prevent_link.setter
-    def prevent_link(self, value: str):
-        self._set_attr("prevent_link", value)
-
-    # on_page_started
-    @property
-    def on_page_started(self) -> OptionalControlEventCallable:
-        return self._get_event_handler("page_started")
-
-    @on_page_started.setter
-    def on_page_started(self, handler: OptionalControlEventCallable):
-        self._add_event_handler("page_started", handler)
-
-    # on_page_ended
-    @property
-    def on_page_ended(self) -> OptionalControlEventCallable:
-        return self._get_event_handler("page_ended")
-
-    @on_page_ended.setter
-    def on_page_ended(self, handler: OptionalControlEventCallable):
-        self._add_event_handler("page_ended", handler)
-
-    # on_web_resource_error
-    @property
-    def on_web_resource_error(self) -> OptionalControlEventCallable:
-        return self._get_event_handler("web_resource_error")
-
-    @on_web_resource_error.setter
-    def on_web_resource_error(self, handler: OptionalControlEventCallable):
-        self._add_event_handler("web_resource_error", handler)
-
-    # on_progress
-    @property
-    def on_progress(self) -> OptionalControlEventCallable:
-        return self._get_event_handler("progress")
-
-    @on_progress.setter
-    def on_progress(self, handler: OptionalControlEventCallable):
-        self._add_event_handler("progress", handler)
-
-    # on_url_change
-    @property
-    def on_url_change(self) -> OptionalControlEventCallable:
-        return self._get_event_handler("url_change")
-
-    @on_url_change.setter
-    def on_url_change(self, handler: OptionalControlEventCallable):
-        self._add_event_handler("url_change", handler)
-
-    # on_scroll
-    @property
-    def on_scroll(self) -> OptionalEventCallable[WebviewScrollEvent]:
-        return self.__on_scroll.handler
-
-    @on_scroll.setter
-    def on_scroll(self, handler: OptionalEventCallable[WebviewScrollEvent]):
-        self.__on_scroll.handler = handler
-
-    # on_console_message
-    @property
-    def on_console_message(self) -> OptionalEventCallable[WebviewConsoleMessageEvent]:
-        return self.__on_console_message.handler
-
-    @on_console_message.setter
-    def on_console_message(
-        self, handler: OptionalEventCallable[WebviewConsoleMessageEvent]
-    ):
-        self.__on_console_message.handler = handler
-
-    # on_javascript_alert_dialog
-    @property
-    def on_javascript_alert_dialog(
-        self,
-    ) -> OptionalEventCallable[WebviewJavaScriptEvent]:
-        return self.__on_javascript_alert_dialog.handler
-
-    @on_javascript_alert_dialog.setter
-    def on_javascript_alert_dialog(
-        self, handler: OptionalEventCallable[WebviewJavaScriptEvent]
-    ):
-        self.__on_javascript_alert_dialog.handler = handler
+        Note:
+            Works only on the following platforms: iOS, Android and macOS.
+        """
+        self._check_mobile_or_mac_platform()
+        await self._invoke_method_async("scroll_by", arguments={"x": x, "y": y})

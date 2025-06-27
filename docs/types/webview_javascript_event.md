@@ -1,0 +1,1 @@
+::: flet_webview.types.WebViewJavaScriptEvent

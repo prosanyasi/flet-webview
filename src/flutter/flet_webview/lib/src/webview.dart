@@ -7,35 +7,23 @@ import 'webview_windows_and_linux.dart'
     if (dart.library.html) "webview_windows_and_linux_vain.dart";
 
 class WebViewControl extends StatelessWidget {
-  final Control? parent;
   final Control control;
-  final bool parentDisabled;
-  final FletControlBackend backend;
 
-  const WebViewControl(
-      {super.key,
-      required this.parent,
-      required this.control,
-      required this.parentDisabled,
-      required this.backend});
+  const WebViewControl({super.key, required this.control});
 
   @override
   Widget build(BuildContext context) {
     debugPrint("WebViewControl build: ${control.id}");
-    String url = control.attrString("url", "https://flet.dev")!;
     Widget view =
         const ErrorControl("Webview is not yet supported on this platform.");
-    if (isMobilePlatform() || isMacOSDesktop()) {
-      var bgcolor =
-          parseColor(Theme.of(context), control.attrString("bgcolor"));
-      view = WebviewMobileAndMac(
-          control: control, backend: backend, bgcolor: bgcolor);
-    } else if (isWebPlatform()) {
-      view = WebviewWeb(control: control, backend: backend);
+    if (isWebPlatform()) {
+      view = WebviewWeb(control: control);
+    } else if (isMobilePlatform() || isMacOSDesktop()) {
+      view = WebviewMobileAndMac(control: control);
     } else if (isWindowsDesktop() || isLinuxDesktop()) {
-      view = WebviewDesktop(url: url);
+      view = const WebviewDesktop();
     }
 
-    return constrainedControl(context, view, parent, control);
+    return ConstrainedControl(control: control, child: view);
   }
 }

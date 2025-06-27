@@ -9,10 +9,6 @@ A [Flet](https://flet.dev) extension for displaying web content in a WebView.
 It is based on the [webview_flutter](https://pub.dev/packages/webview_flutter)
 and [webview_flutter_web](https://pub.dev/packages/webview_flutter_web) Flutter packages.
 
-## Documentation
-
-Detailed documentation to this package can be found [here](https://flet-dev.github.io/flet-webview/).
-
 ## Platform Support
 
 This package supports the following platforms:
@@ -26,26 +22,32 @@ This package supports the following platforms:
 | Android  |     ✅     |
 | Web      |     ✅     |
 
-## Installation
+## Usage
+
+### Installation
 
 To install the `flet-webview` package and add it to your project dependencies:
 
-- Using `uv`:
+=== "uv"
     ```bash
     uv add flet-webview
     ```
 
-- Using `pip`:
+=== "pip"
     ```bash
-    pip install flet-webview
+    pip install flet-webview  # (1)!
     ```
-    After this, you will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
 
-- Using `poetry`:
+    1. After this, you will have to manually add this package to your `requirements.txt` or `pyproject.toml`.
+
+=== "poetry"
     ```bash
     poetry add flet-webview
     ```
 
-## Examples
 
-For examples, see [this](./examples)
+## Example
+
+```python title="main.py"
+--8<-- "examples/webview_example/src/main.py"
+``` 
